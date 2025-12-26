@@ -1,30 +1,35 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import connectDB from './src/config/connect.js';
+import Listing from './src/models/listing.model.js';
+import listRoutes from './src/routes/list.route.js';
 
 dotenv.config();
 connectDB();
 
 const app = express();
+app.use(express.json());
 
 
 app.get('/',(req,res)=>{
     res.send('Hello World!');
 })
 
-app.get('/testlisting',async(req,res) =>{
-    let sampleListing =new  Listing({
-        title: "my new villa",
-        description:"by the beach",
-        price:1200,
-        location:"goa",
-        country:"india"
-    });
+app.use('/api/lists', listRoutes);
 
-    await sampleListing.save();
-    console.log('sample saved');
-    res.send('sample listing created');
-})
+// app.get('/testlisting',async(req,res) =>{
+//     let sampleListing =new  Listing({
+//         title: "my new villa",
+//         description:"by the beach",
+//         price:1200,
+//         location:"goa",
+//         country:"india"
+//     });
+
+//     await sampleListing.save();
+//     console.log('sample saved');
+//     res.send('sample listing created');
+// })
 
 
 
