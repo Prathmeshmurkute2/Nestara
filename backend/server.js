@@ -17,6 +17,7 @@ app.get('/',(req,res)=>{
 
 app.use('/api/lists', listRoutes);
 
+
 // app.get('/testlisting',async(req,res) =>{
 //     let sampleListing =new  Listing({
 //         title: "my new villa",
