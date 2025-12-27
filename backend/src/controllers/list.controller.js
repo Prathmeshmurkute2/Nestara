@@ -2,7 +2,15 @@ import Listing from "../models/listing.model.js";
 
 export const createList  = async (req,res) =>{
     try{
+        console.log("REQ BODY:", req.body);
+
         const { title, description, price, location, country } = req.body;
+         if (!title || !description || !price || !location || !country) {
+            return res.status(400).json({message: "All fields are required"});
+        }
+        if (typeof price !== 'number' || price <= 0) {
+            return res.status(400).json({message: "Price must be a positive number"});
+        }
         const newListing = new Listing({
             title,
             description,
@@ -51,7 +59,7 @@ export const updateListById = async (req,res)=>{
             return res.status(404).json({message:"Listing not found"});
         }
         res.status(200).json({message:"Listing updated successfully", Listing: updateListById
-            
+
         })
     }
     catch(error){
