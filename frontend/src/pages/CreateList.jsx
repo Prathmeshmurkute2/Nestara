@@ -59,65 +59,79 @@ const CreateList = () => {
         }
     }
   return (
-    <div>
-      <form onSubmit={handleSubmit} encType='multipart/form-data'>
+    
+  <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-md">
+      <h1 className="text-2xl font-bold text-center py-4">
+        Create a New Listing
+      </h1>
 
-        <input 
-        type="text" 
-        name="title"
-        placeholder="List Title" 
-        className="border p-2 m-2"
-        onChange={handleChange}
-        />
-
-
-        <textarea 
-        name="description"
-        placeholder="List Description" 
-        className="border p-2 m-2"
-        onChange={handleChange}
-        />
-
-
+      <form
+        onSubmit={handleSubmit}
+        encType="multipart/form-data"
+        className="space-y-3"
+      >
+        <label>Title</label>
         <input
-        type="file"
-        accept='image/*'
-        name="image"
-        className="border p-2 m-2"
-        onChange={handleImageChange}
+          type="text"
+          name="title"
+          placeholder="List Title"
+          className="border p-2 w-full"
+          onChange={handleChange}
         />
 
-        <input 
-        type="number" 
-        name="price"
-        placeholder='price' 
-        className="border p-2 m-2"
-        onChange={handleChange}
+        <label>Description</label>
+        <textarea
+          name="description"
+          placeholder="List Description"
+          className="border p-2 w-full"
+          onChange={handleChange}
         />
 
-
-        <input 
-        type="text" 
-        name="location"
-        placeholder='location' 
-        className="border p-2 m-2"
-        onChange={handleChange}
+        <label>Image</label>
+        <input
+          type="file"
+          accept="image/*"
+          name="image"
+          className="border p-2 w-full"
+          onChange={handleImageChange}
         />
 
-
-        <input 
-        type="text" 
-        name="country"
-        placeholder='country' 
-        className="border p-2 m-2"
-        onChange={handleChange}
+        <label>Price</label>
+        <input
+          type="number"
+          name="price"
+          placeholder="Price"
+          className="border p-2 w-full"
+          onChange={handleChange}
         />
 
-        <button className="bg-blue-500 text-white p-2 m-2">
-            Create List
-            </button>
+        <label>Location</label>
+        <input
+          type="text"
+          name="location"
+          placeholder="Location"
+          className="border p-2 w-full"
+          onChange={handleChange}
+        />
+
+        <label>Country</label>
+        <input
+          type="text"
+          name="country"
+          placeholder="Country"
+          className="border p-2 w-full"
+          onChange={handleChange}
+        />
+
+        <button className="bg-blue-500 text-white p-2 w-full rounded">
+          Create List
+        </button>
       </form>
     </div>
+  </div>
+
+
   )
 }
 
