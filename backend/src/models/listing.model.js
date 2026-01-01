@@ -12,9 +12,6 @@ const listSchema = new mongoose.Schema({
     image:{
         type:String,
         default:'https://images.pexels.com/photos/236047/pexels-photo-236047.jpeg?cs=srgb&dl=clouds-cloudy-countryside-236047.jpg&fm=jpg',
-        set: (v) => v === "" 
-        ? 'https://images.pexels.com/photos/236047/pexels-photo-236047.jpeg?cs=srgb&dl=clouds-cloudy-countryside-236047.jpg&fm=jpg'
-        :v,
     },
     price:{
         type:Number,
@@ -29,7 +26,7 @@ const listSchema = new mongoose.Schema({
         required:true,
     }
 
-})
+},{timestamps:true})
 
 const Listing = mongoose.model('Listing', listSchema);
 export default Listing;
