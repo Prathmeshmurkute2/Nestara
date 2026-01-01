@@ -1,7 +1,8 @@
 import Listing from "../models/listing.model.js";
+import asyncHandler from "../utils/asyncHandler.js";
 
-export const createList  = async (req,res) =>{
-    try{
+export const createList  =asyncHandler( async (req,res) =>{
+    
         console.log("REQ BODY:", req.body);
         console.log("FILE:", req.file);
 
@@ -15,7 +16,7 @@ export const createList  = async (req,res) =>{
         if(isNaN(numericPrice) || numericPrice <= 0){
           return res.status(400).json({ message: "Price must be a positive number" });
         }
-        const Listing = {
+        const SecListing = {
             title,
             description,
             price: numericPrice,
@@ -24,30 +25,24 @@ export const createList  = async (req,res) =>{
         };
 
         if(req.file){
-          Listing.image = req.file.path;
+          SecListing.image = req.file.path;
         }
 
-        const newListing = new Listing(Listing);
+        const newListing = new Listing(SecListing);
         await newListing.save();
         res.status(201).json({message:"Listing created successfully", Listing: newListing});
 
-    }catch(error){
-        res.status(500).json({message:"server error",error:error.message});
-    }
-}
+});
 
-export const getAllLists= async (req,res) =>{
-    try{
+export const getAllLists= asyncHandler(async (req,res) =>{
+    
         const Listings = await Listing.find();
         res.status(200).json({Listings} );
-    }
-    catch(error){
-        res.status(500).json({message:"server error",error:error.message});
-    }
-}
+    
+});
 
-export const getListById = async (req,res) =>{
-    try{
+export const getListById = asyncHandler(async (req,res) =>{
+    
         const { id } =  req.params;
         const listing = await Listing.findById(id);
         if(!listing){
@@ -55,14 +50,11 @@ export const getListById = async (req,res) =>{
 
         }
         res.status(200).json({listing});
-    }
-    catch(error){
-        res.status(500).json({message:"server error",error:error.message})
-    }
-}
+  
+});
 
-export const updateListById = async (req,res)=>{
-      try {
+export const updateListById = asyncHandler(async (req,res)=>{
+      
     const { id } = req.params;
 
     const updatedData = {
@@ -92,24 +84,16 @@ export const updateListById = async (req,res)=>{
       message: 'Listing updated successfully',
       listing: updatedListing,
     });
-  } catch (error) {
-    res.status(500).json({
-      message: 'Server error',
-      error: error.message,
-    });
-  }
-}
+ 
+})
 
-export const deleteListById = async (req,res)=>{
-    try{
+export const deleteListById = asyncHandler(async (req,res)=>{
+   
         const { id } = req.params;
         const deleteListing = await Listing.findByIdAndDelete(id);
         if(!deleteListing){
             return res.status(404).json({message:"Listing not found"});
         }
         res.status(200).json({message:"Listing deleted successfully"});
-    }
-    catch(error){
-        res.status(500).json({message:"server error",error:error.message});
-    }
-}
+   
+})
