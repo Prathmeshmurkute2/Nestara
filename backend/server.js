@@ -6,6 +6,11 @@ import cors from 'cors'
 
 
 dotenv.config();
+console.log("ENV CHECK:", {
+  CLOUD_NAME: process.env.CLOUD_NAME,
+  CLOUD_API_KEY: process.env.CLOUD_API_KEY,
+});
+
 connectDB();
 
 

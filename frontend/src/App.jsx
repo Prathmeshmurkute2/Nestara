@@ -10,6 +10,7 @@ const App = () => {
     <div className="min-h-screen bg-gray-100">
       <Routes>
         <Route element={<Layout />}>
+          <Route path='/'/>
           <Route path="/create" element={<CreateList />} />
           <Route path="/listings" element={<Listings />} />
           <Route path="/edit/:id" element={<EditList />} />

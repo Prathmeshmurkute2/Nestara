@@ -3,22 +3,31 @@ import Listing from "../models/listing.model.js";
 export const createList  = async (req,res) =>{
     try{
         console.log("REQ BODY:", req.body);
+        console.log("FILE:", req.file);
+
 
         const { title, description, price, location, country } = req.body;
          if (!title || !description || !price || !location || !country) {
             return res.status(400).json({message: "All fields are required"});
         }
-        if (typeof price !== 'number' || price <= 0) {
-            return res.status(400).json({message: "Price must be a positive number"});
+        
+        const numericPrice = Number(price);
+        if(isNaN(numericPrice) || numericPrice <= 0){
+          return res.status(400).json({ message: "Price must be a positive number" });
         }
-        const newListing = new Listing({
+        const Listing = {
             title,
             description,
-            price,
+            price: numericPrice,
             location,
             country,
-            image: req.file ? req.file.path : undefined
-        });
+        };
+
+        if(req.file){
+          Listing.image = req.file.path;
+        }
+
+        const newListing = new Listing(Listing);
         await newListing.save();
         res.status(201).json({message:"Listing created successfully", Listing: newListing});
 

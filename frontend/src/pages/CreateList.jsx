@@ -65,9 +65,17 @@ const CreateList = () => {
         }
       );
 
-      const result = await response.text();
+      if (!response.ok) {
+          const errorText = await response.text();
+          console.error("Backend error:", errorText);
+          alert("Failed to create listing");
+          return;
+        }
+
+      const result = await response.json();
       console.log(result);
       alert("Listing created successfully");
+
     } catch (error) {
       console.error("Error creating listing:", error);
       alert("Failed to create listing");
