@@ -3,11 +3,16 @@ import mongoose from'mongoose'
 const listSchema = new mongoose.Schema({
     title:{
         type:String,
-        required:true,
+        required:[true,'Title is required'],
+        trim:true,
+        minlength: [3, "Title must be at least 3 characters"],
+        maxlength: [50, "Title cannot exceed 50 characters"]
     },
     description:{
         type:String,
-        required:true,
+        required:[true,'Description is required'],
+        trim:true,
+        minlength: [10, "Description must be at least 10 characters"],
     },
     image:{
         type:String,
@@ -15,15 +20,18 @@ const listSchema = new mongoose.Schema({
     },
     price:{
         type:Number,
-        required:true,
+        required:[true, 'Price is required'],
+        min:[1,'Price must be greater than zero'],
     },
     location:{
         type:String,
-        required:true,
+        required:[true,'Location is required'],
+        trim:true,
     },
     country:{
         type:String,
-        required:true,
+        required:[true,'Country is required'],
+        trim:true,
     }
 
 },{timestamps:true})
