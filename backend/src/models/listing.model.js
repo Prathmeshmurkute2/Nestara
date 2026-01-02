@@ -32,7 +32,11 @@ const listSchema = new mongoose.Schema({
         type:String,
         required:[true,'Country is required'],
         trim:true,
-    }
+    },
+    reviews:[{
+        type:mongoose.Types.ObjectId,
+        ref:'Review'
+    }]
 
 },{timestamps:true})
 
