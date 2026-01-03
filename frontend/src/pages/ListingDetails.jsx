@@ -11,6 +11,9 @@ const ListingDetails = () => {
     const [comment, setComment] = useState("");
     const [submitting, setSubmitting] = useState(false);
 
+    const [reviews, setReviews] = useState([]);
+
+
     useEffect(()=>{
         const fetchListing = async () =>{
             const res = await fetch(
@@ -22,6 +25,23 @@ const ListingDetails = () => {
         };
 
         fetchListing();
+    },[id]);
+
+    useEffect(()=>{
+        const fetchReviews = async()=>{
+            try{
+                const res = await fetch(
+                    `http://localhost:3000/api/lists/${id}/reviews`
+                );
+                const data = await res.json();
+                setReviews(data.reviews || []);
+            }
+            catch(err){
+                console.error("Failed to load reviews");
+                setReviews([]);
+            }
+        };
+        fetchReviews();
     },[id]);
 
     const handleDelete = async() =>{
@@ -51,10 +71,10 @@ const ListingDetails = () => {
                         "Content-Type":"application/json"
                     },
                     body: JSON.stringify({
-                        review:{
+                    
                             rating,
                             comment
-                        }
+                    
                     })
                 }
             );
@@ -65,7 +85,8 @@ const ListingDetails = () => {
             }
 
             alert("Review added successfully ✅");
-
+            
+            setReviews(data.reviews || []);
             setRating(3);
             setComment("");
         }
@@ -124,7 +145,7 @@ const ListingDetails = () => {
                     name="rate"
                     id="rating"
                     type="range"
-                    min="0"
+                    min="1"
                     max="5"
                     step="1"
                     value={rating}
@@ -167,6 +188,28 @@ const ListingDetails = () => {
                 </button>
             </form>
             </div>
+            <hr/>
+            <div className="max-w-2xl mx-auto mt-10">
+                <h2 className='text-xl font-semibold mb-4'>All Reviews</h2>
+
+                {Array.isArray(reviews) && reviews.length === 0 && (
+                    <p className='text-gray-500'>No reviews yet</p>
+                )}
+
+                {Array.isArray(reviews) && reviews.map((review) =>(
+                    <div
+                        key={review._id}
+                        className='border rounded-lg p-4 mb-4 shadow-sm'
+                    >
+                        <p className='font-medium'>⭐ {review.rating} / 5</p>
+                        <p className='text-gray-700 mt-1'>{review.comment}</p>
+                        <small className='text-gray-400'>
+                            {new Date(review.createdAt).toLocaleDateString()}
+                        </small>
+                    </div>
+                ))}
+            </div>
+
 
         </div>
   )

@@ -18,12 +18,15 @@ const reviewSchema = new mongoose.Schema(
             },
             message: "Comment must contain meaningful text"
         },
-    }
-
-
-    
+    },
+    listing:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref:"Listing",
+      required:true,
+    },
   },
   { timestamps: true }
+  
 );
 
 const Review = mongoose.model("Review", reviewSchema);
