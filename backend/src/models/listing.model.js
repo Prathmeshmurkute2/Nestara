@@ -1,4 +1,5 @@
 import mongoose from'mongoose'
+import Review from './reviews.models.js'
 
 const listSchema = new mongoose.Schema({
     title:{
@@ -39,6 +40,13 @@ const listSchema = new mongoose.Schema({
     }]
 
 },{timestamps:true})
+
+//middleware if list get delete the all review also get delte automatically from db
+listSchema.post("findOneAndDelete", async (listing)=>{
+    if(listing){
+        await Review.deleteMany({ _id:{ $in: listing.reviews }})
+    }
+})
 
 const Listing = mongoose.model('Listing', listSchema);
 export default Listing;

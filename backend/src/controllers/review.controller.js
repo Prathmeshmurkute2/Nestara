@@ -51,3 +51,27 @@ export const getReviewsByListing= asyncHandler(async (req,res)=>{
     reviews: reviews || []
   });
 });
+
+
+export const deleteReview = asyncHandler( async (req,res)=>{
+  const { reviewId, id } = req.params; // id=listingId
+
+  const review = await Review.findById(reviewId);
+  if(!review){
+    return res.status(404).json({ message:"Review not found"});
+  }
+
+  await Review.findByIdAndDelete(reviewId);
+
+  await Listing.findByIdAndUpdate(id,{
+    $pull: { reviews: reviewId }
+  });
+
+  const reviews = await Review.find({ listing: id })
+  .sort({ createdAt: -1 });
+
+  res.status(200).json({
+    message:"Review deleted successfully",
+    reviews
+  })
+})

@@ -97,6 +97,28 @@ const ListingDetails = () => {
         }
     }
 
+    const handleDeleteReview = async (reviewId) =>{
+        const confirm = window.confirm("Delete this review?");
+        if(!confirm) return;
+
+        try{
+            const res = await fetch(
+                `http://localhost:3000/api/lists/${id}/reviews/${reviewId}`,
+                { method: "DELETE" }
+            );
+
+            const data = await res.json();
+
+            if(!res.ok){
+                throw new Error(data.message || "Failed to delete review");
+            }
+            setReviews(data.reviews);
+        }
+        catch(error){
+            alert(error.message)
+        }
+    }
+
     if(loading) return <p >Loading...</p>;
     if(!listing) return <p>Listing not found</p>;
 
@@ -203,11 +225,22 @@ const ListingDetails = () => {
                     >
                         <p className='font-medium'>⭐ {review.rating} / 5</p>
                         <p className='text-gray-700 mt-1'>{review.comment}</p>
+
+                        
                         <small className='text-gray-400'>
                             {new Date(review.createdAt).toLocaleDateString()}
                         </small>
+                        <button
+                            onClick={() => handleDeleteReview(review._id)}
+                            className="text-red-500 border rounded-lg bg-gray-100 text-sm mt-2 hover:underline px-3 py-1"
+                        >
+                            Delete
+                        </button>
+
+                            
                     </div>
                 ))}
+                
             </div>
 
 
