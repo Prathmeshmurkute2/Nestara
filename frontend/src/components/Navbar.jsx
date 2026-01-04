@@ -1,19 +1,42 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React ,{ useState, useEffect } from "react";
+import { Link,NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCompass } from "@fortawesome/free-regular-svg-icons";
+import { useNavigate, useLocation } from "react-router-dom";
+
 
 const Navbar = () => {
+  const navigate= useNavigate();
+  const location = useLocation();
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(()=>{
+    fetch("http://localhost:3000/api/auth/home",{
+      credentials: "include"
+    })
+    .then((res)=> setIsLoggedIn(res.ok))
+    .catch(()=> setIsLoggedIn(false))
+
+  },[location.pathname]) 
+
+  const handleLogout = async ()=>{
+    await fetch("http://localhost:3000/api/auth/logout",{
+      method:"POST",
+      credentials: "include"
+    })
+    setIsLoggedIn(false);
+    navigate("/")
+  }
+
   return (
     <div className="w-full h-12 bg-white shadow-sm flex items-center px-4">
       
-      {/* Logo */}
       <div className="text-red-600 text-xl mr-6">
         <FontAwesomeIcon icon={faCompass} />
       </div>
 
-      {/* Navigation */}
-      <nav className="flex gap-6 text-base font-medium">
+      <nav className="flex gap-6 text-base font-sans">
         
         <NavLink
           to="/"
@@ -51,6 +74,34 @@ const Navbar = () => {
           Add New Listing
         </NavLink>
 
+      </nav>
+      <nav className="flex gap-6 text-base font-normal ms-auto">
+        {!isLoggedIn && (
+        <>
+        <Link
+          to="/signup"
+          className="no-underline text-black"
+        >
+          Sign up
+        </Link>
+
+        <Link
+          to="/login"
+          className="no-underline text-black"
+        >
+          Login
+        </Link>
+        </>
+        )}
+
+        {isLoggedIn && (
+        <button
+          onClick={handleLogout}
+          className="text-black hover:text-red-600 transition"
+        >
+          Log out
+        </button>
+      )}
       </nav>
     </div>
   );

@@ -27,14 +27,29 @@ router.post("/login", (req,res, next) =>{
         })
     })(req,res, next);
 })
-    
-router.get("/home" , isAuthenticated, (req, res)=>{
+
+router.post("/signup", signUp);
+
+router.use(isAuthenticated);   
+
+router.post("/logout", (req, res, next)=>{
+    req.logout((err)=>{
+        if(err) return next(err);
+
+        req.session.destroy(()=>{
+            res.clearCookie("connect.sid");
+            res.status(200).json({ message: "Logged out successfully" })
+        })
+    })
+})
+
+router.get("/home" ,  (req, res)=>{
     res.json({
         message: 'Welcome',
         user: req.user
     })
 })
 
-router.post("/signup", signUp);
+
 
 export default router;

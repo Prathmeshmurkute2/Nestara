@@ -1,35 +1,39 @@
-import bcrypt from 'bcrypt';
-import User from '../models/user.model.js'
-import asyncHandler from '../utils/asyncHandler.js';
+import bcrypt from "bcrypt";
+import User from "../models/user.model.js";
+import asyncHandler from "../utils/asyncHandler.js";
 
-export const signUp = asyncHandler( async(req,res)=>{
-    const { name, email, password } = req.body;
+export const signUp = asyncHandler(async (req, res, next) => {
+  const { name, email, password } = req.body;
 
-    if(!name || !email || !password){
-        return res.status(400).json({ message: "All field required" })
-    }
+  if (!name || !email || !password) {
+    return res.status(400).json({ message: "All fields required" });
+  }
 
-    const user = await User.findOne({ email });
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    return res.status(409).json({ message: "User already exists" });
+  }
 
-    if(user){
-        return res.status(409).json({ message:"User already exist" })
-    }
+  const hashedPassword = await bcrypt.hash(password, 10);
 
-    const hashPassword = await bcrypt.hash(password, 10);
+  const newUser = await User.create({
+    name,
+    email,
+    password: hashedPassword
+  });
 
-    const newUser = await User.create({
-        name,
-        email,
-        password:hashPassword
-    })
+  // 🔥 AUTO LOGIN (SESSION CREATION)
+  req.login(newUser, (err) => {
+    if (err) return next(err);
 
+    // ✅ SEND RESPONSE ONLY AFTER SESSION EXISTS
     res.status(201).json({
-    message: "User registered successfully",
-    user: {
-      id: newUser._id,
-      name: newUser.name,
-      email: newUser.email
-    }
-})
-})
-
+      message: "User registered successfully",
+      user: {
+        id: newUser._id,
+        name: newUser.name,
+        email: newUser.email
+      }
+    });
+  });
+});

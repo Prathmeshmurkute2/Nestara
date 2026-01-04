@@ -7,16 +7,18 @@ import {
     deleteListById
 } from '../controllers/list.controller.js';
 import { upload } from '../middleware/upload.middleware.js';
+import { isAuthenticated } from '../middleware/isAuth.middleware.js';
 
 const router = express.Router();
-
-router.post('/listings',upload.single('image'), createList);
 
 router.get('/listings', getAllLists);
 router.get('/listings/:id', getListById);
 
-router.put('/listings/:id', upload.single('image'), updateListById);
+router.use(isAuthenticated)
 
+router.post('/listings',upload.single('image'), createList);
+
+router.put('/listings/:id', upload.single('image'), updateListById);
 
 router.delete('/listings/:id', deleteListById);
 
