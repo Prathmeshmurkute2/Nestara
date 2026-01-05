@@ -24,7 +24,13 @@ const reviewSchema = new mongoose.Schema(
       ref:"Listing",
       required:true,
     },
+    author:{
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"User",
+      required:true
+  }
   },
+  
   { timestamps: true }
   
 );

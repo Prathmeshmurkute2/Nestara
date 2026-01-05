@@ -22,6 +22,7 @@ const addReview = asyncHandler(async (req, res) => {
     rating,
     comment,
     listing: listing._id,
+    author: req.user._id
   });
 
   await newReview.save();
@@ -59,6 +60,10 @@ export const deleteReview = asyncHandler( async (req,res)=>{
   const review = await Review.findById(reviewId);
   if(!review){
     return res.status(404).json({ message:"Review not found"});
+  }
+
+  if(review.author.equals(req.user._id)){
+    return res.status(403).json({ message: "You are not allowed" })
   }
 
   await Review.findByIdAndDelete(reviewId);

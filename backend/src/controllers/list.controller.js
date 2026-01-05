@@ -47,7 +47,15 @@ export const getAllLists= asyncHandler(async (req,res) =>{
 export const getListById = asyncHandler(async (req,res) =>{
     
         const { id } =  req.params;
-        const listing = await Listing.findById(id).populate("owner","name _id");
+        const listing = await Listing.findById(id)
+        .populate("owner","name _id")
+        .populate({
+          path: "reviews",
+          populate:{
+            path: "author",
+            select: "name _id"
+          }
+        })
         if(!listing){
             return res.status(404).json({message:"Listing not found"});
 

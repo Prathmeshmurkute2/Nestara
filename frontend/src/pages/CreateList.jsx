@@ -78,6 +78,17 @@ const CreateList = () => {
       console.log(result);
       alert("Listing created successfully");
 
+      setFormData({
+        title: "",
+        description: "",
+        price: "",
+        location: "",
+        country: "",
+      });
+
+      setImage(null);
+      setValidated(false);
+
     } catch (error) {
       console.error("Error creating listing:", error);
       alert("Failed to create listing");
@@ -106,6 +117,7 @@ const CreateList = () => {
             name="title"
             placeholder="List Title"
             className="form-control"
+            value={formData.title}
             required
             onChange={handleChange}
           />
@@ -117,6 +129,7 @@ const CreateList = () => {
             name="description"
             placeholder="List Description"
             className="form-control"
+            value={formData.description}
             required
             onChange={handleChange}
           />
@@ -128,6 +141,7 @@ const CreateList = () => {
             type="file"
             accept="image/*"
             name="image"
+            value={formData.image}
             className="form-control"
             onChange={handleImageChange}
           />
@@ -139,6 +153,7 @@ const CreateList = () => {
             name="price"
             placeholder="Price"
             className="form-control"
+            value={formData.price}
             required
             onChange={handleChange}
           />
@@ -151,6 +166,7 @@ const CreateList = () => {
             name="location"
             placeholder="Location"
             className="form-control"
+            value={formData.location}
             required
             onChange={handleChange}
           />
@@ -163,6 +179,7 @@ const CreateList = () => {
             name="country"
             placeholder="Country"
             className="form-control"
+            value={formData.country}
             required
             onChange={handleChange}
           />

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate, NavLink } from 'react-router-dom'
+import { Rating } from 'react-simple-star-rating'
+
 const ListingDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -72,9 +74,19 @@ const ListingDetails = () => {
         navigate("/listings");
     }
 
+    const handleRating = (rate) => {
+        const normalized = Math.round(rate / 20);
+        setRating(normalized < 1 ? 1 : normalized); // converts 20–100 to 1–5
+    };
+
     const handleReviewSubmit = async (e)=>{
         e.preventDefault();
         setSubmitting(true);
+
+        if(rating===0){
+            alert("Please select a rating");
+            return;
+        }
 
         try{
             const res = await fetch(
@@ -101,7 +113,7 @@ const ListingDetails = () => {
 
             alert("Review added successfully ✅");
             
-            setReviews(data.reviews || []);
+            setReviews((prev) =>[...prev, data.review]);
             setRating(3);
             setComment("");
         }
@@ -130,7 +142,9 @@ const ListingDetails = () => {
             if(!res.ok){
                 throw new Error(data.message || "Failed to delete review");
             }
-            setReviews(data.reviews);
+            setReviews((prev)=>{
+                prev.filter((r)=> r._id !== reviewId)
+            });
         }
         catch(error){
             alert(error.message)
@@ -172,104 +186,84 @@ const ListingDetails = () => {
         </div>
     )}
         <hr/>
-        <div className="max-w-2xl mx-auto mt-10 bg-white p-6 rounded-xl shadow-md">
-            <form onSubmit={handleReviewSubmit} className="space-y-5">
+        {currentUser && (
+            <div className="max-w-2xl mx-auto mt-10 bg-white p-6 rounded-xl shadow-md">
+                <form onSubmit={handleReviewSubmit} className="space-y-5">
                 <h2 className="text-2xl font-semibold text-gray-800">
-                Leave a Review
+                    Leave a Review
                 </h2>
 
-                {/* Rating */}
-                <div className="flex flex-col gap-2">
-                <label
-                    htmlFor="rating"
-                    className="text-sm font-medium text-gray-700"
-                >
-                    Rating
-                </label>
-
-                <input
-                    name="rate"
-                    id="rating"
-                    type="range"
-                    min="1"
-                    max="5"
-                    step="1"
-                    value={rating}
-                    onChange={(e)=>setRating(Number(e.target.value))}
-                    className="w-full accent-blue-600 cursor-pointer"
+                {/* Stars */}
+                <Rating
+                    onClick={handleRating}
+                    ratingValue={rating * 20}
+                    size={25}
+                    fillColor="gold"
+                    emptyColor="#e5e7eb"
+                    allowFraction={false}
                 />
-
-                <p className="text-sm text-gray-600">Rating: {rating}</p>
-                </div>
 
                 {/* Comment */}
-                <div className="flex flex-col gap-2">
-                <label
-                    htmlFor="comment"
-                    className="text-sm font-medium text-gray-700"
-                >
-                    Comments
-                </label>
-
                 <textarea
-                    name="comment"
-                    id="comment"
-                    rows="5"
+                    rows="4"
                     value={comment}
-                    onChange={(e)=> setComment(e.target.value)}
-                    placeholder="Write your experience here..."
-                    className="border rounded-lg p-3 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    onChange={(e) => setComment(e.target.value)}
+                    placeholder="Write your experience..."
+                    className="w-full border rounded-lg p-3"
                     required
                 />
-                </div>
 
-                {/* Submit Button */}
                 <button
-                type="submit"
-                disabled={submitting}
-                className="w-full bg-black text-white py-2 rounded-lg 
-                            hover:bg-gray-800 transition font-medium"
+                    disabled={submitting}
+                    className="w-full bg-black text-white py-2 rounded-lg"
                 >
-                Submit Review
+                    Submit Review
                 </button>
-            </form>
+                </form>
             </div>
+            )}
+
             <hr/>
-            <div className="max-w-2xl mx-auto mt-10">
-                <h2 className='text-xl font-semibold mb-4'>All Reviews</h2>
+            {reviews.map((review) => (
+                <div
+                    key={review._id}
+                    className="border rounded-lg p-4 mb-4 shadow-sm"
+                >
+                    {/* Author */}
+                    <p className="font-semibold">
+                    {review.author?.name || "Anonymous"}
+                    </p>
 
-                {Array.isArray(reviews) && reviews.length === 0 && (
-                    <p className='text-gray-500'>No reviews yet</p>
-                )}
+                    {/* Stars */}
+                    <Rating
+                    readonly
+                    ratingValue={review.rating * 20}
+                    size={18}
+                    fillColor="gold"
+                    />
 
-                {Array.isArray(reviews) && reviews.map((review) =>(
-                    <div
-                        key={review._id}
-                        className='border rounded-lg p-4 mb-4 shadow-sm'
+                    <p className="text-gray-700 mt-1">{review.comment}</p>
+
+                    <small className="text-gray-400">
+                    {new Date(review.createdAt).toLocaleDateString()}
+                    </small>
+
+                    {/* Delete only if author */}
+                    {currentUserId === review.author?._id && (
+                    <button
+                        onClick={() => handleDeleteReview(review._id)}
+                        className="text-red-500 text-sm mt-2"
                     >
-                        <p className='font-medium'>⭐ {review.rating} / 5</p>
-                        <p className='text-gray-700 mt-1'>{review.comment}</p>
-
-                        
-                        <small className='text-gray-400'>
-                            {new Date(review.createdAt).toLocaleDateString()}
-                        </small>
-                        <button
-                            onClick={() => handleDeleteReview(review._id)}
-                            className="text-red-500 border rounded-lg bg-gray-100 text-sm mt-2 hover:underline px-3 py-1"
-                        >
-                            Delete
-                        </button>
-
-                            
-                    </div>
+                        Delete
+                    </button>
+                    )}
+                </div>
                 ))}
-                
-            </div>
+
 
 
         </div>
   )
 }
 
-export default ListingDetails
+export default ListingDetails;
