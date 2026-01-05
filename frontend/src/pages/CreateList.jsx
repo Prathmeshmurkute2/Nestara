@@ -61,7 +61,9 @@ const CreateList = () => {
         "http://localhost:3000/api/lists/listings",
         {
           method: "POST",
+          credentials:"include",
           body: data,
+          
         }
       );
 

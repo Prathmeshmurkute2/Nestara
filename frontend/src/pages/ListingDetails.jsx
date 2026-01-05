@@ -13,11 +13,22 @@ const ListingDetails = () => {
 
     const [reviews, setReviews] = useState([]);
 
+    const currentUser = JSON.parse(localStorage.getItem("user"));
+    const ownerId =
+        typeof listing?.owner === "string"
+            ? listing.owner
+            : listing?.owner?._id;
+
+        const currentUserId = currentUser?._id || currentUser?.id;
+
+        const isOwner = ownerId === currentUserId;
 
     useEffect(()=>{
         const fetchListing = async () =>{
             const res = await fetch(
-                `http://localhost:3000/api/lists/listings/${id}`
+                `http://localhost:3000/api/lists/listings/${id}`,{
+                    credentials:"include"
+                }
             );
             const data = await res.json();
             setlisting(data.listing);
@@ -31,7 +42,9 @@ const ListingDetails = () => {
         const fetchReviews = async()=>{
             try{
                 const res = await fetch(
-                    `http://localhost:3000/api/lists/${id}/reviews`
+                    `http://localhost:3000/api/lists/${id}/reviews`,{
+                        credentials:"include"
+                    }
                 );
                 const data = await res.json();
                 setReviews(data.reviews || []);
@@ -51,7 +64,8 @@ const ListingDetails = () => {
         await fetch(
             `http://localhost:3000/api/lists/listings/${id}`,
             {
-                method: "DELETE"
+                method: "DELETE",
+                credentials:"include"
             }
         );
 
@@ -67,6 +81,7 @@ const ListingDetails = () => {
                 `http://localhost:3000/api/lists/${id}/reviews`,
                 {
                     method:"POST",
+                    credentials: "include",
                     headers:{
                         "Content-Type":"application/json"
                     },
@@ -104,7 +119,10 @@ const ListingDetails = () => {
         try{
             const res = await fetch(
                 `http://localhost:3000/api/lists/${id}/reviews/${reviewId}`,
-                { method: "DELETE" }
+                { method: "DELETE",
+                    credentials:"include"
+                 },
+                
             );
 
             const data = await res.json();
@@ -130,12 +148,17 @@ const ListingDetails = () => {
             className="w-full h-80 object-cover rounded"
         />
 
+        <p className="owner-name">
+            Owner: <strong>{listing.owner?.name}</strong>
+        </p>
+
         <h1 className="text-2xl font-bold mt-4">{listing.title}</h1>
         <p className="mt-2">{listing.description}</p>
 
         <p className="text-xl font-bold mt-2">{listing.price}</p>
         <p className="text-gray-600">{listing.location}, {listing.country}</p>
 
+    {isOwner && (
         <div className="flex gap-4 mt-6">
             <NavLink
                 to={`/edit/${listing._id}`}
@@ -147,6 +170,7 @@ const ListingDetails = () => {
                 className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                 >Delete</button>
         </div>
+    )}
         <hr/>
         <div className="max-w-2xl mx-auto mt-10 bg-white p-6 rounded-xl shadow-md">
             <form onSubmit={handleReviewSubmit} className="space-y-5">

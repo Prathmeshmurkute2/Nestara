@@ -28,7 +28,10 @@ export const createList  =asyncHandler( async (req,res) =>{
           SecListing.image = req.file.path;
         }
 
-        const newListing = new Listing(SecListing);
+        const newListing = new Listing({
+          ...SecListing,
+          owner: req.user._id
+});
         await newListing.save();
         res.status(201).json({message:"Listing created successfully", Listing: newListing});
 
@@ -44,7 +47,7 @@ export const getAllLists= asyncHandler(async (req,res) =>{
 export const getListById = asyncHandler(async (req,res) =>{
     
         const { id } =  req.params;
-        const listing = await Listing.findById(id);
+        const listing = await Listing.findById(id).populate("owner","name _id");
         if(!listing){
             return res.status(404).json({message:"Listing not found"});
 

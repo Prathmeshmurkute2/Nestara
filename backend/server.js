@@ -26,7 +26,13 @@ app.use(
     session({
         secret: "mynameisprathum",
         resave:false,
-        saveUninitialized: false
+        saveUninitialized: false,
+        cookie:{
+            httpOnly: true,
+            secure: false,
+
+            sameSite:"lax"
+        }
     })
 );
 

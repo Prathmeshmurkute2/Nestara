@@ -1,6 +1,7 @@
 import mongoose from'mongoose'
 import Review from './reviews.models.js'
 
+
 const listSchema = new mongoose.Schema({
     title:{
         type:String,
@@ -37,7 +38,12 @@ const listSchema = new mongoose.Schema({
     reviews:[{
         type:mongoose.Types.ObjectId,
         ref:'Review'
-    }]
+    }],
+    owner:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'User',
+        required:true
+    }
 
 },{timestamps:true})
 
