@@ -43,7 +43,18 @@ const listSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:'User',
         required:true
-    }
+    },
+    geometry:{
+        type: {
+            type: String,
+            enum: ["Point"],
+            default: 'Point'
+        },
+        coordinates:{
+            type:[Number],
+            required:true,
+        },
+    },
 
 },{timestamps:true})
 
@@ -53,6 +64,9 @@ listSchema.post("findOneAndDelete", async (listing)=>{
         await Review.deleteMany({ _id:{ $in: listing.reviews }})
     }
 })
+
+listSchema.index({ geometry: "2dsphere" });
+
 
 const Listing = mongoose.model('Listing', listSchema);
 export default Listing;

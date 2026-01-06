@@ -1,6 +1,7 @@
 import cloudinary from "../config/cloudinary.js";
 import Listing from "../models/listing.model.js";
 import asyncHandler from "../utils/asyncHandler.js";
+import { geocodeLocation } from "../utils/geocode.js";
 
 export const createList  =asyncHandler( async (req,res) =>{
     
@@ -17,12 +18,20 @@ export const createList  =asyncHandler( async (req,res) =>{
         if(isNaN(numericPrice) || numericPrice <= 0){
           return res.status(400).json({ message: "Price must be a positive number" });
         }
+
+        const fullAddress = `${location}, ${country}`;
+        const coordinates = await geocodeLocation(fullAddress);
+
         const SecListing = {
             title,
             description,
             price: numericPrice,
             location,
             country,
+            geometry:{
+              type:"Point",
+              coordinates
+            }
         };
 
         if(req.file){
@@ -77,6 +86,15 @@ export const updateListById = asyncHandler(async (req,res)=>{
       country: req.body.country,
     };
 
+    if (req.body.location || req.body.country) {
+      const fullAddress = `${req.body.location}, ${req.body.country}`;
+      const coordinates = await geocodeLocation(fullAddress);
+
+      updatedData.geometry = {
+        type: "Point",
+        coordinates,
+      };
+  }
     // ✅ if new image uploaded, update it
     if (req.file) {
       updatedData.image = req.file.path; // Cloudinary URL

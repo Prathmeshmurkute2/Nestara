@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate, NavLink } from 'react-router-dom'
 import { Rating } from 'react-simple-star-rating'
+import ListingMap from '../components/ListingMap.jsx'
 
 const ListingDetails = () => {
     const { id } = useParams();
@@ -15,16 +16,7 @@ const ListingDetails = () => {
 
     const [reviews, setReviews] = useState([]);
 
-    const currentUser = JSON.parse(localStorage.getItem("user"));
-    const ownerId =
-        typeof listing?.owner === "string"
-            ? listing.owner
-            : listing?.owner?._id;
-
-        const currentUserId = currentUser?._id || currentUser?.id;
-
-        const isOwner = ownerId === currentUserId;
-
+    
     useEffect(()=>{
         const fetchListing = async () =>{
             const res = await fetch(
@@ -151,6 +143,17 @@ const ListingDetails = () => {
     if(loading) return <p >Loading...</p>;
     if(!listing) return <p>Listing not found</p>;
 
+    const currentUser = JSON.parse(localStorage.getItem("user"));
+    const ownerId =
+        typeof listing?.owner === "string"
+            ? listing.owner
+            : listing?.owner?._id;
+
+        const currentUserId = currentUser?._id || currentUser?.id;
+
+        const isOwner = ownerId === currentUserId;
+
+
   return (
     <div className="p-6 max-w-3xl mx-auto">
         <img
@@ -263,6 +266,11 @@ const ListingDetails = () => {
                     )}
                 </div>
                 ))}
+                <ListingMap
+                    coordinates={[73.8567, 18.5204]}
+                    title={listing.title}
+                    location={listing.location}
+                    />
 
 
 
