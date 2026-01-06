@@ -13,7 +13,8 @@ const EditList = () => {
     description: "",
     price: "",
     location: "",
-    country: ""
+    country: "",
+    image:""
   });
 
   useEffect(() => {
@@ -64,11 +65,12 @@ const EditList = () => {
         `http://localhost:3000/api/lists/listings/${id}`,
         {
           method: "PUT",
-          body: data
+          body: data,
+          credentials:"include"
         }
       );
 
-      navigate("/listings");
+      navigate(`/listings/${id}`);
     } catch (err) {
       console.error("Update failed", err);
     }
@@ -129,6 +131,16 @@ const EditList = () => {
       <div className="invalid-feedback">Country is required</div>
 
       {/* Optional image */}
+      {formData.image && (
+        <div className="m-2">
+          <p>Current Image:</p>
+          <img
+            src={formData.image}
+            alt="Current"
+            style={{ width: "200px", borderRadius:"8px"}}
+          />
+        </div>
+      )}
       <input
         type="file"
         accept="image/*"

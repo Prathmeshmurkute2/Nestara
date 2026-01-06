@@ -9,7 +9,7 @@ const ListingDetails = () => {
     const [listing, setlisting] = useState(null);
     const [loading, setloading] = useState(true);
 
-    const [rating, setRating] = useState(3);
+    const [rating, setRating] = useState(0);
     const [comment, setComment] = useState("");
     const [submitting, setSubmitting] = useState(false);
 
@@ -75,8 +75,7 @@ const ListingDetails = () => {
     }
 
     const handleRating = (rate) => {
-        const normalized = Math.round(rate / 20);
-        setRating(normalized < 1 ? 1 : normalized); // converts 20–100 to 1–5
+        setRating(rate);
     };
 
     const handleReviewSubmit = async (e)=>{
@@ -114,7 +113,7 @@ const ListingDetails = () => {
             alert("Review added successfully ✅");
             
             setReviews((prev) =>[...prev, data.review]);
-            setRating(3);
+            setRating(0);
             setComment("");
         }
         catch(error){
@@ -142,9 +141,7 @@ const ListingDetails = () => {
             if(!res.ok){
                 throw new Error(data.message || "Failed to delete review");
             }
-            setReviews((prev)=>{
-                prev.filter((r)=> r._id !== reviewId)
-            });
+            setReviews((prev)=> prev.filter((r)=> r._id !== reviewId));
         }
         catch(error){
             alert(error.message)
@@ -196,11 +193,14 @@ const ListingDetails = () => {
                 {/* Stars */}
                 <Rating
                     onClick={handleRating}
-                    ratingValue={rating * 20}
+                    initialValue={rating}
                     size={25}
-                    fillColor="gold"
-                    emptyColor="#e5e7eb"
+                    transition
                     allowFraction={false}
+                    SVGstyle={{ display: "inline-block" }}
+                    fillColor="#facc15"
+                    emptyColor="#e5e7eb"
+                    className='flex gap-1'
                 />
 
                 {/* Comment */}
@@ -237,9 +237,13 @@ const ListingDetails = () => {
                     {/* Stars */}
                     <Rating
                     readonly
-                    ratingValue={review.rating * 20}
+                    initialValue={review.rating}
                     size={18}
-                    fillColor="gold"
+                    allowFraction={false}
+                    SVGstyle={{ display: "inline-block" }}
+                    fillColor="#facc15"
+                    emptyColor='#e5e7eb'
+                    className='flex gap-1'
                     />
 
                     <p className="text-gray-700 mt-1">{review.comment}</p>
@@ -252,7 +256,7 @@ const ListingDetails = () => {
                     {currentUserId === review.author?._id && (
                     <button
                         onClick={() => handleDeleteReview(review._id)}
-                        className="text-red-500 text-sm mt-2"
+                        className="text-red-400 border rounded-lg p-2 ms-2 hover:text-red-600 transition"
                     >
                         Delete
                     </button>

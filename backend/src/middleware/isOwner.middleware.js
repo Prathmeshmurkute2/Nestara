@@ -3,7 +3,7 @@ import Listing from '../models/listing.model.js'
 const isOwner = async (req, res, next)=>{
     const { id } = req.params;
 
-    const listing = await Listing.findByid(id);
+    const listing = await Listing.findById(id);
 
     if(!listing){
         return res.status(404).json({ message: "Listing not found" });

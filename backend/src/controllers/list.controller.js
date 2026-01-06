@@ -1,3 +1,4 @@
+import cloudinary from "../config/cloudinary.js";
 import Listing from "../models/listing.model.js";
 import asyncHandler from "../utils/asyncHandler.js";
 
