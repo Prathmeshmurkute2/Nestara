@@ -55,6 +55,22 @@ const listSchema = new mongoose.Schema({
             required:true,
         },
     },
+    category: {
+        type: String,
+        enum: [
+            "trending",
+            "rooms",
+            "iconic",
+            "mountains",
+            "castles",
+            "pools",
+            "camping",
+            "farms",
+            "arctic"
+        ],
+        required: true
+    },
+
 
 },{timestamps:true})
 

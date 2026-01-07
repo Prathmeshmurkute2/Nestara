@@ -4,6 +4,19 @@ const CreateList = () => {
   // 🔹 Validation state (replaces EJS JS)
   const [validated, setValidated] = useState(false);
 
+  const CATEGORIES = [
+  "trending",
+  "rooms",
+  "iconic",
+  "mountains",
+  "castles",
+  "pools",
+  "camping",
+  "farms",
+  "arctic",
+];
+
+
   // 🔹 Form data
   const [formData, setFormData] = useState({
     title: "",
@@ -11,6 +24,7 @@ const CreateList = () => {
     price: "",
     location: "",
     country: "",
+    category:"",
   });
 
   // 🔹 Optional image
@@ -35,7 +49,7 @@ const CreateList = () => {
 
     const form = e.currentTarget;
 
-    // 🔴 Bootstrap validation logic
+    
     if (!form.checkValidity()) {
       e.stopPropagation();
       setValidated(true);
@@ -51,8 +65,10 @@ const CreateList = () => {
       data.append("price", formData.price);
       data.append("location", formData.location);
       data.append("country", formData.country);
+      data.append("category", formData.category);
 
-      // image is optional
+
+      
       if (image) {
         data.append("image", image);
       }
@@ -84,6 +100,7 @@ const CreateList = () => {
         price: "",
         location: "",
         country: "",
+        category:"",
       });
 
       setImage(null);
@@ -141,7 +158,6 @@ const CreateList = () => {
             type="file"
             accept="image/*"
             name="image"
-            value={formData.image}
             className="form-control"
             onChange={handleImageChange}
           />
@@ -184,6 +200,25 @@ const CreateList = () => {
             onChange={handleChange}
           />
           <div className="invalid-feedback">Country is required</div>
+
+          <label>Category</label>
+          <select
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+            className="form-control m-2"
+            required
+          >
+            <option value="">Select category</option>
+            {CATEGORIES.map((cat)=>(
+              <option key={cat} value={cat}>
+                {cat.charAt(0).toUpperCase() + cat.slice(1)}
+              </option>
+            ))}
+          </select>
+          <div className="invalid-feedback">
+            Category is required
+          </div>
 
           <button className="btn btn-primary w-full">
             Create List

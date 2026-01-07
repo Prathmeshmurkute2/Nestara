@@ -5,8 +5,8 @@ import { geocodeLocation } from "../utils/geocode.js";
 
 export const createList  =asyncHandler( async (req,res) =>{
     
-        const { title, description, price, location, country } = req.body;
-         if (!title || !description || !price || !location || !country) {
+        const { title, description, price, location, country, category } = req.body;
+         if (!title || !description || !price || !location || !country || !category) {
             return res.status(400).json({message: "All fields are required"});
         }
         
@@ -24,6 +24,7 @@ export const createList  =asyncHandler( async (req,res) =>{
             price: numericPrice,
             location,
             country,
+            category,
             geometry:{
               type:"Point",
               coordinates
