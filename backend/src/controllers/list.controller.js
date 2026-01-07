@@ -5,10 +5,6 @@ import { geocodeLocation } from "../utils/geocode.js";
 
 export const createList  =asyncHandler( async (req,res) =>{
     
-        console.log("REQ BODY:", req.body);
-        console.log("FILE:", req.file);
-
-
         const { title, description, price, location, country } = req.body;
          if (!title || !description || !price || !location || !country) {
             return res.status(400).json({message: "All fields are required"});

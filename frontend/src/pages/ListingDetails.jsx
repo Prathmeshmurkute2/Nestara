@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate, NavLink } from 'react-router-dom'
 import { Rating } from 'react-simple-star-rating'
 import ListingMap from '../components/ListingMap.jsx'
-
+import { formatPrice } from '../utils/FormatPrice.js'
 const ListingDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -169,7 +169,7 @@ const ListingDetails = () => {
         <h1 className="text-2xl font-bold mt-4">{listing.title}</h1>
         <p className="mt-2">{listing.description}</p>
 
-        <p className="text-xl font-bold mt-2">{listing.price}</p>
+        <p className="text-xl font-bold mt-2">{formatPrice(listing.price)}</p>
         <p className="text-gray-600">{listing.location}, {listing.country}</p>
 
     {isOwner && (
@@ -266,13 +266,15 @@ const ListingDetails = () => {
                     )}
                 </div>
                 ))}
-                <ListingMap
-                    coordinates={[73.8567, 18.5204]}
-                    title={listing.title}
-                    location={listing.location}
+                {listing.geometry && listing.geometry.coordinates ? (
+                    <ListingMap
+                        coordinates={listing.geometry.coordinates}
+                        title={listing.title}
+                        location={`${listing.location}, ${listing.country}`}
                     />
-
-
+                    ) : (
+                    <p className="text-gray-500">📍 Location not available</p>
+                    )}
 
         </div>
   )

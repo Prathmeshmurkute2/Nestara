@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { formatPrice } from "../utils/FormatPrice.js";
 
 const Listings = () => {
   const [listings, setListings] = useState([]);
@@ -58,7 +59,7 @@ const Listings = () => {
             />
             <span className="absolute top-3 right-3 bg-black/70 text-white 
                              text-sm px-3 py-1 rounded-full">
-              ₹{listing.price}
+              {formatPrice(listing.price)}
             </span>
           </div>
 

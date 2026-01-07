@@ -32,12 +32,13 @@ const Navbar = () => {
   return (
     <div className="w-full h-12 bg-white shadow-sm flex items-center px-4">
       
-      <div className="text-red-600 text-xl mr-6">
+      <Link to="/listings" className="text-red-600 text-xl mr-6">
         <FontAwesomeIcon icon={faCompass} />
-      </div>
+      </Link>
+
 
       <nav className="flex gap-6 text-base font-sans">
-        
+{/*         
         <NavLink
           to="/"
           className={({ isActive }) =>
@@ -48,7 +49,7 @@ const Navbar = () => {
           }
         >
           Home
-        </NavLink>
+        </NavLink> */}
 
         <NavLink
           to="/listings"
@@ -59,10 +60,14 @@ const Navbar = () => {
                : "text-black hover:text-red-600 transition"}`
           }
         >
-          All Listings
+          Explore
         </NavLink>
 
-        <NavLink
+        
+
+      </nav>
+      <nav className="flex gap-6 text-base font-normal ms-auto">
+         <NavLink
           to="/create"
           className={({ isActive }) =>
             `no-underline
@@ -71,23 +76,20 @@ const Navbar = () => {
                : "text-black hover:text-red-600 transition"}`
           }
         >
-          Add New Listing
+          List your place
         </NavLink>
-
-      </nav>
-      <nav className="flex gap-6 text-base font-normal ms-auto">
         {!isLoggedIn && (
         <>
         <Link
           to="/signup"
-          className="no-underline text-black"
+          className="no-underline text-black font-bold"
         >
           Sign up
         </Link>
 
         <Link
           to="/login"
-          className="no-underline text-black"
+          className="no-underline text-black font-bold"
         >
           Login
         </Link>
@@ -97,7 +99,7 @@ const Navbar = () => {
         {isLoggedIn && (
         <button
           onClick={handleLogout}
-          className="text-black hover:text-red-600 transition"
+          className="text-black hover:text-red-600 font-bold transition"
         >
           Log out
         </button>
