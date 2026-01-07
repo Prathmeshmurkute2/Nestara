@@ -30,7 +30,7 @@ const SignUp = () => {
     const data = await res.json();
 
     if (res.ok) {
-      navigate("/");
+      navigate("/listings");
     } else {
       alert(data.message || "Signup failed");
     }

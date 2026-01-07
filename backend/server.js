@@ -9,6 +9,7 @@ import session from 'express-session'
 import passport from "passport"
 import './src/config/passport.js'
 import authRoutes from './src/routes/user.route.js'
+import searchRoutes from "./src/routes/search.route.js";
 
 dotenv.config();
 
@@ -47,6 +48,7 @@ app.use(passport.session());
 app.use('/api/lists', listRoutes);
 app.use('/api/lists',reviewRouter);
 app.use("/api/auth", authRoutes);
+app.use("/api/search", searchRoutes);
 
 app.use(errorHandler)
 const PORT = process.env.PORT || 3000;

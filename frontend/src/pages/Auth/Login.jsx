@@ -30,7 +30,7 @@ const Login = () => {
 
     if (res.ok) {
       localStorage.setItem("user",JSON.stringify(data.user))
-      navigate("/");
+      navigate("/listings");
     } else {
       alert(data.message || "Login failed");
     }

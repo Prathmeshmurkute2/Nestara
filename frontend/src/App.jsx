@@ -13,11 +13,11 @@ const App = () => {
     <div className="min-h-screen bg-gray-100">
       <Routes>
         <Route path='/signup' element={ <SignUp/> } />
-        <Route path='login' element={ <Login/> } />
+        <Route path='/login' element={ <Login/> } />
 
         <Route element={<Layout />}>
           
-          
+          <Route path="/" element={<Listings />} />
           <Route path="/create" element={<CreateList />} />
           <Route path="/listings" element={<Listings />} />
           <Route path="/listings/:id" element={<ListingDetails />} />
