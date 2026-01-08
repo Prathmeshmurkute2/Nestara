@@ -55,12 +55,15 @@ const Listings = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-6">
-      
-      {/* CATEGORY BAR */}
-      <CategoryBar
-        activeCategory={category}
-        onSelect={setCategory}
-      />
+      <div className="w-full overflow-x-auto scrollbar-hide">
+        <div className="flex gap-10 px-6 py-4 whitespace-nowrap min-w-max">
+        {/* CATEGORY BAR */}
+          <CategoryBar
+            activeCategory={category}
+            onSelect={setCategory}
+          />
+        </div>
+      </div>
 
       {/* LISTINGS GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">

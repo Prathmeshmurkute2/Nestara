@@ -12,7 +12,28 @@
 html,body{
     height:100%;
     width:100%;
+    overflow-x: hidden;
+}
+
+body {
+  overflow-y: scroll;
 }
 
 
+body::-webkit-scrollbar{
+    display: none;
+}
 
+body {
+    -ms-overflow-style : none;
+    scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE & Edge */
+  scrollbar-width: none;     /* Firefox */
+}

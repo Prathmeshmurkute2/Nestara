@@ -24,7 +24,7 @@ const Footer = () => {
             <p className="text-sm mt-2">&copy; Nestara private limited</p>
         </div>
         <div className=''>
-            <a href="https://www.nestara.com" target="_blank" rel="noopener noreferrer" className="text-sm mt-4 hover:underline ">Privacy Terms</a>
+            <a href="https://www.neestara.com" target="_blank" rel="noopener noreferrer" className="text-sm mt-4 hover:underline ">Privacy Terms</a>
         </div>
      </div>
     </footer>
