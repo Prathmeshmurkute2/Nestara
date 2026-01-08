@@ -7,6 +7,18 @@ const EditList = () => {
 
   const [validated, setValidated] = useState(false);
   const [image, setImage] = useState(null);
+  const categories = [
+  "trending",
+  "rooms",
+  "iconic",
+  "mountains",
+  "castles",
+  "pools",
+  "camping",
+  "farms",
+  "arctic",
+];
+
 
   const [formData, setFormData] = useState({
     title: "",
@@ -14,6 +26,7 @@ const EditList = () => {
     price: "",
     location: "",
     country: "",
+    category:"",
     image:""
   });
 
@@ -23,7 +36,16 @@ const EditList = () => {
         `http://localhost:3000/api/lists/listings/${id}`
       );
       const data = await res.json();
-      setFormData(data.listing);
+      setFormData({
+        title: data.listing.title,
+        description: data.listing.description,
+        price: data.listing.price,
+        location: data.listing.location,
+        country: data.listing.country,
+        category: data.listing.category,
+        image: data.listing.image,
+      });
+
     };
 
     fetchListing();
@@ -56,6 +78,7 @@ const EditList = () => {
       data.append("price", Number(formData.price));
       data.append("location", formData.location);
       data.append("country", formData.country);
+      data.append("category",formData.category)
 
       if (image) {
         data.append("image", image);
@@ -129,6 +152,22 @@ const EditList = () => {
         required
       />
       <div className="invalid-feedback">Country is required</div>
+
+        <select
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+            className="form-control m-2"
+            required
+          >
+            <option value="">Select category</option>
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat.charAt(0).toUpperCase() + cat.slice(1)}
+              </option>
+            ))}
+        </select>
+
 
       {/* Optional image */}
       {formData.image && (

@@ -72,7 +72,11 @@ export const getListById = asyncHandler(async (req,res) =>{
 });
 
 export const updateListById = asyncHandler(async (req,res)=>{
-      
+    if ("category" in req.body && !req.body.category) {
+          return res.status(400).json({
+            message: "Category is required"
+          });
+}
     const { id } = req.params;
 
     const updatedData = {
@@ -81,6 +85,7 @@ export const updateListById = asyncHandler(async (req,res)=>{
       price: req.body.price,
       location: req.body.location,
       country: req.body.country,
+      category: req.body.category,
     };
 
     if (req.body.location || req.body.country) {
@@ -115,7 +120,8 @@ export const updateListById = asyncHandler(async (req,res)=>{
 })
 
 export const deleteListById = asyncHandler(async (req,res)=>{
-   
+
+
         const { id } = req.params;
         const deleteListing = await Listing.findByIdAndDelete(id);
         if(!deleteListing){
