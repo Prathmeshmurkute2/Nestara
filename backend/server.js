@@ -10,6 +10,7 @@ import passport from "passport"
 import './src/config/passport.js'
 import authRoutes from './src/routes/user.route.js'
 import searchRoutes from "./src/routes/search.route.js";
+import MongoStore from "connect-mongo";
 
 dotenv.config();
 
@@ -17,23 +18,36 @@ connectDB();
 
 
 const app = express();
+app.set("trust proxy", 1);
+
+
 app.use(cors({
-    origin:"http://localhost:5173",
+    origin: process.env.FRONTEND_URL,
     credentials: true
 }))
 app.use(express.json());
 app.use(express.urlencoded({ extended:true }))
 app.use(
     session({
-        secret: "mynameisprathum",
+        name:"connect.sid",
+        secret: process.env.SESSION_SECRET,
         resave:false,
         saveUninitialized: false,
-        cookie:{
-            httpOnly: true,
-            secure: false,
 
-            sameSite:"lax"
-        }
+        store: MongoStore.create({
+            mongoUrl: process.env.MONGO_URI,
+            collectionName: "sessions",
+            ttl: 24 * 60* 60
+        }),
+
+        cookie: {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "none",
+            maxAge: 1000 * 60 * 60 * 24 // 1 day
+            }
+
+
     })
 );
 
