@@ -55,9 +55,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-// app.get('/',(req,res)=>{
-//     res.send('Hello World!');
-// })
+app.get('/',(req,res)=>{
+    res.send('Hello World!');
+})
 
 app.use('/api/lists', listRoutes);
 app.use('/api/lists',reviewRouter);
