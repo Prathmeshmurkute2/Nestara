@@ -19,7 +19,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:3000/api/auth/login", {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -40,7 +40,6 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
       <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
         
-        {/* Header */}
         <div className="text-center mb-6">
           <h2 className="text-3xl font-bold text-gray-800">Welcome Back</h2>
           <p className="text-gray-500 text-sm mt-1">

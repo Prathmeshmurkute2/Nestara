@@ -33,7 +33,7 @@ const EditList = () => {
   useEffect(() => {
     const fetchListing = async () => {
       const res = await fetch(
-        `http://localhost:3000/api/lists/listings/${id}`
+        `${import.meta.env.VITE_API_URL}/api/lists/listings/${id}`
       );
       const data = await res.json();
       setFormData({
@@ -85,7 +85,7 @@ const EditList = () => {
       }
 
       await fetch(
-        `http://localhost:3000/api/lists/listings/${id}`,
+        `${import.meta.env.VITE_API_URL}/api/lists/listings/${id}`,
         {
           method: "PUT",
           body: data,

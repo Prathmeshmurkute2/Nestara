@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { formatPrice } from "../utils/FormatPrice.js";
 import CategoryBar from "../components/CategoryBar.jsx";
-
+import api from "../api/axios.js";
 const Listings = () => {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,27 +11,27 @@ const Listings = () => {
   const [category, setCategory] = useState("");
 
   const fetchListings = async (selectedCategory = "") => {
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      const query = selectedCategory
-        ? `?category=${selectedCategory}`
-        : "";
+    const query = selectedCategory
+      ? `?category=${selectedCategory}`
+      : "";
 
-      const res = await fetch(
-        `http://localhost:3000/api/lists/listings${query}`
-      );
+    const res = await api.get(`/api/lists/listings${query}`);
 
-      if (!res.ok) throw new Error("Failed to fetch listings");
+    setListings(
+      Array.isArray(res.data.Listings) ? res.data.Listings : []
+    );
+  } catch (err) {
+    setError(
+      err.response?.data?.message || "Failed to fetch listings"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
-      const data = await res.json();
-      setListings(Array.isArray(data.Listings) ? data.Listings : []);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // 🔁 Fetch listings whenever category changes
   useEffect(() => {

@@ -20,7 +20,7 @@ const Navbar = () => {
     const timer = setTimeout(async () => {
       try {
         const res = await fetch(
-          `http://localhost:3000/api/search?q=${query}`,
+          `${import.meta.env.VITE_API_URL}/api/search?q=${query}`,
           { credentials: "include" }
         );
         setResults(await res.json());
@@ -34,7 +34,7 @@ const Navbar = () => {
 
   //  Auth check
   useEffect(() => {
-    fetch("http://localhost:3000/api/auth/home", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/auth/home`, {
       credentials: "include",
     })
       .then((res) => setIsLoggedIn(res.ok))
@@ -42,7 +42,7 @@ const Navbar = () => {
   }, [location.pathname]);
 
   const handleLogout = async () => {
-    await fetch("http://localhost:3000/api/auth/logout", {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/auth/logout`, {
       method: "POST",
       credentials: "include",
     });

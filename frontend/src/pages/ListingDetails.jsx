@@ -20,7 +20,7 @@ const ListingDetails = () => {
     useEffect(()=>{
         const fetchListing = async () =>{
             const res = await fetch(
-                `http://localhost:3000/api/lists/listings/${id}`,{
+                `${import.meta.env.VITE_API_URL}/api/lists/listings/${id}`,{
                     credentials:"include"
                 }
             );
@@ -36,7 +36,7 @@ const ListingDetails = () => {
         const fetchReviews = async()=>{
             try{
                 const res = await fetch(
-                    `http://localhost:3000/api/lists/${id}/reviews`,{
+                    `${import.meta.env.VITE_API_URL}/api/lists/${id}/reviews`,{
                         credentials:"include"
                     }
                 );
@@ -56,7 +56,7 @@ const ListingDetails = () => {
         if(!confirm) return;
         
         await fetch(
-            `http://localhost:3000/api/lists/listings/${id}`,
+            `${import.meta.env.VITE_API_URL}/api/lists/listings/${id}`,
             {
                 method: "DELETE",
                 credentials:"include"
@@ -81,7 +81,7 @@ const ListingDetails = () => {
 
         try{
             const res = await fetch(
-                `http://localhost:3000/api/lists/${id}/reviews`,
+                `${import.meta.env.VITE_API_URL}/api/lists/${id}/reviews`,
                 {
                     method:"POST",
                     credentials: "include",
@@ -121,7 +121,7 @@ const ListingDetails = () => {
 
         try{
             const res = await fetch(
-                `http://localhost:3000/api/lists/${id}/reviews/${reviewId}`,
+                `${import.meta.env.VITE_API_URL}/api/lists/${id}/reviews/${reviewId}`,
                 { method: "DELETE",
                     credentials:"include"
                  },
