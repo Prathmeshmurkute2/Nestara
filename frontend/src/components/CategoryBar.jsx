@@ -8,7 +8,7 @@ const CategoryBar = ({ activeCategory, onSelect }) =>{
           key={cat.key}
           onClick={()=> onSelect(cat.key)}
           className={`flex flex-col items-center min-w-[80px]
-            ${activeCategory == cat.key
+            ${activeCategory === cat.key
               ?"text-black border-b-2 border-black"
               : "text-text-400 hover:text-black"}`}
         >

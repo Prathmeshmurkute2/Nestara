@@ -3,19 +3,22 @@ import { Link } from "react-router-dom";
 import { formatPrice } from "../utils/FormatPrice.js";
 import CategoryBar from "../components/CategoryBar.jsx";
 import api from "../api/axios.js";
+import { useParams, useNavigate } from "react-router-dom";
+
 const Listings = () => {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [category, setCategory] = useState("");
+  const { category } = useParams();
+  const navigate = useNavigate();
 
-  const fetchListings = async (selectedCategory = "") => {
+  const fetchListings = async () => {
   try {
     setLoading(true);
 
-    const query = selectedCategory
-      ? `?category=${selectedCategory}`
+    const query = category
+      ? `?category=${category}`
       : "";
 
     const res = await api.get(`/api/lists/listings${query}`);
@@ -33,9 +36,8 @@ const Listings = () => {
 };
 
 
-  // 🔁 Fetch listings whenever category changes
   useEffect(() => {
-    fetchListings(category);
+    fetchListings(category || "");
   }, [category]);
 
   if (loading)
@@ -60,7 +62,7 @@ const Listings = () => {
         {/* CATEGORY BAR */}
           <CategoryBar
             activeCategory={category}
-            onSelect={setCategory}
+            onSelect={(cat) => navigate(`/listings/category/${cat}`)}
           />
         </div>
       </div>
